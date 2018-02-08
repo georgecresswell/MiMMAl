@@ -11,11 +11,11 @@ runMiMMAl(samplename, inputfile, min.snps = 10, sd.width = 1/3, seed = 1,
 \arguments{
 \item{samplename}{The output name for your sample.}
 
-\item{inputfile}{The file to be read in as containing the columns; chr, pos, BAF, BAFseg}
+\item{inputfile}{The file to be read in as containing the columns; chr, pos, BAF, BAFseg.}
 
-\item{min.snps}{Minimum number of SNPs to model. Default = 10}
+\item{min.snps}{Minimum number of SNPs to model. Default = 10.}
 
-\item{sd.width}{This value is multiplied by the chosen sd and the tested sd range is determines as the sd±sd.width. Default = 1/3.}
+\item{sd.width}{This value is multiplied by the chosen sd and the tested sd range is determined as the sd±sd.width. Default = 1/3.}
 
 \item{seed}{Seed set for reproducibility. Default = 1.}
 
@@ -23,13 +23,13 @@ runMiMMAl(samplename, inputfile, min.snps = 10, sd.width = 1/3, seed = 1,
 
 \item{use.ks.gate}{Require the data to pass a normality test before modelling. Default = TRUE.}
 
-\item{plot.sd.den}{Plot the sd density plot?. Default = TRUE.}
+\item{plot.sd.den}{Plot the sd density plot? Default = TRUE.}
 
-\item{plot.lit.plot}{Plot the global grid search?. Default = TRUE.}
+\item{plot.lit.plot}{Plot the global grid search? Default = TRUE.}
 
-\item{plot.star.plot}{Plot the local grid search?. Default = TRUE.}
+\item{plot.star.plot}{Plot the local grid search? Default = TRUE.}
 
-\item{plot.transformed}{Plot the transformed data?. Default = TRUE.}
+\item{plot.transformed}{Plot the transformed data? Default = TRUE.}
 }
 \description{
 This function takes segmented BAF data as input and models the major and minor allele distributions.

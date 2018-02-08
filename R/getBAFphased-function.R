@@ -36,7 +36,7 @@ getBAFphased = function(x, seed=1) {
   }
 
   #Which means are less than 0.5?
-  flip.dists = mixmdl$mu < 0.5
+  flip.dists = mix.object$mu < 0.5
 
   #Now what do we return?
   if(all(flip.dists)) {

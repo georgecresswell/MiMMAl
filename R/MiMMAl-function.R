@@ -17,6 +17,8 @@
 #' @import cowplot
 #' @import ComplexHeatmap
 #' @import circlize
+#' @import grid
+#' @importFrom cowplot ggsave
 #' @export
 #' @examples
 #' runMiMMAl()

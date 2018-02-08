@@ -9,8 +9,9 @@ Encoding: UTF-8
 LazyData: true
 Imports:
     mixtools (== 1.0.4),
-    ggplot2 (>= 2.2.1),
     cowplot (>= 0.8.0),
+    ggplot2 (>= 2.2.1),
     ComplexHeatmap (>= 1.12.0),
-    circlize (>= 0.4.1)
+    circlize (>= 0.4.1),
+    grid (>= 3.3.3)
 RoxygenNote: 6.0.1.9000
