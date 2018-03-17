@@ -5,6 +5,7 @@
 #' @param inputfile The file to be read in as containing the columns; chr, pos, BAF, BAFseg.
 #' @param min.snps Minimum number of SNPs to model. Default = 10.
 #' @param sd.width This value is multiplied by the chosen sd and the tested sd range is determined as the sd±sd.width. Default = 1/3.
+#' @param preset.sd Add a float value for the standard deviation if it is to be preset, without this it 'learns' the sd. Default = NULL.
 #' @param seed Seed set for reproducibility. Default = 1.
 #' @param baf.res 10^-baf.res is used as the size of the steps used in the grid search for testing BAF values. Default = 2.
 #' @param use.ks.gate Require the data to pass a normality test before modelling. Default = TRUE.
@@ -28,6 +29,7 @@ runMiMMAl = function(samplename,
                      inputfile,
                      min.snps    = 10,
                      sd.width    = 1/3,
+                     preset.sd   = NULL,
                      seed        = 1,
                      baf.res     = 2,
                      use.ks.gate      = TRUE,
@@ -44,83 +46,88 @@ runMiMMAl = function(samplename,
   #Name the output file
   outputfile=paste0(samplename,".BAFphased.txt")
 
-  #Record the standard deviations calculated
-  sds    = NULL
+  #Add option to proceed with a preset standard deviation
+  if(is.null(preset.sd)) {
 
-  #Run through the chromosomes to segment and model them to find the standard deviation of the array
-  for (chr in unique(BAFdata[,1])) {
+    #Record the standard deviations calculated
+    sds    = NULL
 
-    BAFrawchr = BAFdata[BAFdata[,1]==chr,c(2,3)]
-    BAFrawchr = BAFrawchr[!is.na(BAFrawchr[,2]),]
+    #Run through the chromosomes to segment and model them to find the standard deviation of the array
+    for (chr in unique(BAFdata[,1])) {
 
-    BAF = BAFrawchr[,2]
-    pos = BAFrawchr[,1]
-    names(BAF) = rownames(BAFrawchr)
-    names(pos) = rownames(BAFrawchr)
+      BAFrawchr = BAFdata[BAFdata[,1]==chr,c(2,3)]
+      BAFrawchr = BAFrawchr[!is.na(BAFrawchr[,2]),]
 
-    print(paste("BAFlen=",length(BAF),sep=""))
+      BAF = BAFrawchr[,2]
+      pos = BAFrawchr[,1]
+      names(BAF) = rownames(BAFrawchr)
+      names(pos) = rownames(BAFrawchr)
 
-    #
-    BAFsegm = BAFdata[BAFdata[,1]==chr,c(4)]
+      print(paste("BAFlen=",length(BAF),sep=""))
 
-    #Now take the positions of segment boundaries
-    starts         = c(1, which(BAFsegm[-1] != BAFsegm[-length(BAFsegm)])+1)
-    ends           = c(which(BAFsegm[-1] != BAFsegm[-length(BAFsegm)]), length(BAFsegm))
-    segment.bounds = cbind(starts, ends)
+      #
+      BAFsegm = BAFdata[BAFdata[,1]==chr,c(4)]
 
-    #Run through the segments and model them
-    for(seg in 1:length(starts)) {
+      #Now take the positions of segment boundaries
+      starts         = c(1, which(BAFsegm[-1] != BAFsegm[-length(BAFsegm)])+1)
+      ends           = c(which(BAFsegm[-1] != BAFsegm[-length(BAFsegm)]), length(BAFsegm))
+      segment.bounds = cbind(starts, ends)
 
-      #Take the BAF in this segment
-      BAF.seg = BAF[starts[seg]:ends[seg]]
+      #Run through the segments and model them
+      for(seg in 1:length(starts)) {
 
-      #Only bother modelling if it greater than 10 SNPs, otherwise just take the mean
-      if(length(BAF.seg) > 10) {
+        #Take the BAF in this segment
+        BAF.seg = BAF[starts[seg]:ends[seg]]
 
-        #Set the smu
-        smu = c(-mean(abs(BAF.seg-0.5)), mean(abs(BAF.seg-0.5)))
+        #Only bother modelling if it greater than 10 SNPs, otherwise just take the mean
+        if(length(BAF.seg) > 10) {
 
-        #Model it as a mixture of two normal distributions with means that are reflected and the same sds
-        set.seed(seed)
-        mixmdl = normalmixEM(BAF.seg-0.5,
-                             mu = smu,
-                             maxrestarts = 10000,
-                             verb = FALSE,
-                             mean.constr = c("a", "-a"),
-                             sd.constr = c("a", "a"))
+          #Set the smu
+          smu = c(-mean(abs(BAF.seg-0.5)), mean(abs(BAF.seg-0.5)))
 
-        #Record the calculated standard deviation
-        sds = c(sds, mixmdl$sigma[1])
+          #Model it as a mixture of two normal distributions with means that are reflected and the same sds
+          set.seed(seed)
+          mixmdl = normalmixEM(BAF.seg-0.5,
+                               mu = smu,
+                               maxrestarts = 10000,
+                               verb = FALSE,
+                               mean.constr = c("a", "-a"),
+                               sd.constr = c("a", "a"))
 
-        #Show me what you got!
-        print(paste0("Standard deviation is: ",paste0(round(mixmdl$sigma[1], digits = 3), collapse = " ")))
+          #Record the calculated standard deviation
+          sds = c(sds, mixmdl$sigma[1])
+
+          #Show me what you got!
+          print(paste0("Standard deviation is: ",paste0(round(mixmdl$sigma[1], digits = 3), collapse = " ")))
+
+        }
 
       }
 
     }
 
-  }
+    #Calculate the densities of the standard deviations
+    sds.density  = density(sds)
 
-  #Calculate the densities of the standard deviations
-  sds.density  = density(sds)
+    #Now calculated the standard deviation of the signal seen in the array
+    array.sd     = sds.density$x[which.max(sds.density$y)]
 
-  #Now calculated the standard deviation of the signal seen in the array
-  array.sd     = sds.density$x[which.max(sds.density$y)]
+    #Make a dataframe for ggplot because it always fucking insists on it
+    sds.den.df   = data.frame(sd=sds.density$x, density=sds.density$y)
 
-  #Make a dataframe for ggplot because it always fucking insists on it
-  sds.den.df   = data.frame(sd=sds.density$x, density=sds.density$y)
+    if(plot.sd.den) {
+      #Output a png of the standard deviations
+      png(paste0("Density_of_standard_deviation_",samplename,".png"), width = 600, height = 600)
+      p = ggplot(sds.den.df, aes(x=sd, y=density)) +
+        geom_line() +
+        geom_vline(xintercept=array.sd, color="gray", linetype = "longdash") +
+        geom_vline(xintercept=c(array.sd*(1-sd.width), array.sd*(1+sd.width)), color="red", linetype = "longdash") +
+        ggtitle(paste0("Density of standard deviation ",samplename))
+      print(p)
+      dev.off()
+    }
 
-  if(plot.sd.den) {
-    #Output a png of the standard deviations
-    png(paste0("Density_of_standard_deviation_",samplename,".png"), width = 600, height = 600)
-    p = ggplot(sds.den.df, aes(x=sd, y=density)) +
-      geom_line() +
-      geom_vline(xintercept=array.sd, color="gray", linetype = "longdash") +
-      geom_vline(xintercept=c(array.sd*(1-sd.width), array.sd*(1+sd.width)), color="red", linetype = "longdash") +
-      ggtitle(paste0("Density of standard deviation ",samplename))
-    print(p)
-    dev.off()
-  }
+  } else {array.sd = preset.sd}
 
   #So what range of standard deviations will we use in the grid search?
   sigmai     = seq(round(array.sd*(1-sd.width), digits=3),
