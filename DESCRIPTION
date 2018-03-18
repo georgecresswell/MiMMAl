@@ -3,15 +3,15 @@ Title: Using two-component Gaussian mixture modelling to estimate the major alle
 Version: 0.0.0.9000
 Authors@R: person("George", "Cresswell", email = "george.cresswell@icr.ac.uk", role = c("aut", "cre"))
 Description: _Add description_
-Depends: R (>= 3.3.3)
+Depends: R (>= 3.3.2)
 License: GPL-3
 Encoding: UTF-8
 LazyData: true
 Imports:
     mixtools (== 1.0.4),
-    cowplot (>= 0.8.0),
+    cowplot (>= 0.7.0),
     ggplot2 (>= 2.2.1),
     ComplexHeatmap (>= 1.12.0),
-    circlize (>= 0.4.1),
-    grid (>= 3.3.3)
+    circlize (>= 0.3.10),
+    grid (>= 3.3.2)
 RoxygenNote: 6.0.1.9000
