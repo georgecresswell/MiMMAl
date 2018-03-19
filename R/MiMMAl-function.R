@@ -409,4 +409,7 @@ runMiMMAl = function(samplename,
   colnames(BAFoutput) = c("Chromosome","Position","BAF","BAFphased","BAFseg")
   write.table(BAFoutput, outputfile, sep="\t", row.names=F, col.names=T, quote=F)
 
+  #Reset seed
+  set.seed(Sys.time())
+
 }
