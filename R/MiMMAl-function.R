@@ -80,7 +80,7 @@ runMiMMAl = function(samplename,
         BAF.seg = BAF[starts[seg]:ends[seg]]
 
         #Only bother modelling if it greater than 10 SNPs, otherwise just take the mean
-        if(length(BAF.seg) > 10) {
+        if(length(BAF.seg) > min.snps) {
 
           #Set the smu
           smu = c(-mean(abs(BAF.seg-0.5)), mean(abs(BAF.seg-0.5)))

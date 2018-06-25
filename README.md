@@ -29,7 +29,7 @@ By default MiMMAl will produce plots representing the fits produced, including t
 
 There are some additional parameters that can be set in runMiMMAl as required:
 
-* `min.snps` refers to the minimum number of SNPs required for mixture modelling. Default: 10.
+* `min.snps` refers to the minimum number of SNPs required in a segment for initial mixture modelling when searching for a _sd_ range. Smaller segments are effectively controlled for size by the Kolmogorov-Smirnov test for latter fitting. It is best practice to ensure your segments have supporting loci. Default: 10.
 * `sd.width` is the fraction of which the range of _sd_ is set either side of the maxima of kernel density smoothing of the initial fits of mixture modelling using expectation maximisation. Default: 1/3.
 * `preset.sd` if this value is defined, the initial fit will not take place and a range either side of this value as defined by `sd.width` will be used for the global search. Default: NULL.
 * `seed` the seed can be set to allow for reproducibility. Default: 1.
