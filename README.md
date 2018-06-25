@@ -30,8 +30,8 @@ By default MiMMAl will produce plots representing the fits produced, including t
 There are some additional parameters that can be set in runMiMMAl as required:
 
 * `min.snps` refers to the minimum number of SNPs required for mixture modelling. Default: 10.
-* `sd.width` is the fraction of which the range of _sd_ is set either side of the maxima of kernel density smoothing of the initial fits of mixture modelling using expectation maximisation. Default: 1/3.
+* `sd.width` is the fraction of which the range of _sd_ is set either side of the maxima of kernel density smoothing of the _sd_ of the initial fits of mixture modelling using expectation maximisation. Default: 1/3.
 * `preset.sd` if this value is defined, the initial fit will not take place and a range either side of this value as defined by `sd.width` will be used for the global search. Default: NULL.
 * `seed` the seed can be set to allow for reproducibility. Default: 1.
-* `baf.res` or BAF resolution defines the number of intervals in the BAF values. This is defined as `10^-baf.res`. Therefore `baf.res=2` produces intervals of 0.01 between 0 and 0.5 in the global search for BAF mean. Increasing this increases the number of combinations searched and will increase computational time exponentially. Default: 2.
+* `baf.res` or BAF resolution defines the number of intervals in the BAF values. This is defined as `10^-baf.res`. Therefore `baf.res=2` produces intervals of 0.01 between 0 and 0.5 in the global search for BAF mean. Increasing this increases the number of combinations searched and will increase computational time exponentially. The subsequent local search increases the resolution of the fit further, so MiMMAl will always fit each segment to a higher resolution than this initial global search. Default: 2.
 * `use.ks.gate` refers to performing a Kolmogorov-Smirnov test prior to mixture modelling a segment. Default: TRUE.
