@@ -175,7 +175,7 @@ runMiMMAl = function(samplename,
       ks.normal.p.value = ks.test(BAF.seg, pnorm, mean = 0.5, sd = array.sd)$p.value
 
       #Only bother modelling if it greater than the minimum segment size, otherwise just take the median
-      if((ks.normal.p.value < 0.05 | !use.ks.gate) & length(BAF.seg) >= min.snps) {
+      if((ks.normal.p.value < 0.05 | !use.ks.gate) & length(BAF.seg) >= min.seg) {
 
         #Do the grid search across the standard deviations and the full list of means
         grid.list = lapply(sigmai, function(sigmai) {
@@ -368,7 +368,7 @@ runMiMMAl = function(samplename,
       } else {
 
         #If segment is too small make an announcement
-        if(length(BAF.seg) < min.snps) {
+        if(length(BAF.seg) < min.seg) {
 
           #Segment too small!
           print(paste0("segment ",seg," in chromosome ",chr," of ",samplename," is too small to model."))
