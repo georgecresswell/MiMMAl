@@ -30,9 +30,13 @@ By default MiMMAl will produce plots representing the fits produced, including t
 One can make some next generation sequencing style input data using the following lines of code in R.
 
 `n        = 100000`
+
 `coverage = rpois(n, lambda = 120)`
+
 `majcov   = rbinom(n, size = coverage, prob = 0.6)`
+
 `majoraf  = majcov / coverage`
+
 `baf      = ifelse(runif(n) > 0.5, 1 - majoraf, majoraf)`
 
 ## Additional parameters
