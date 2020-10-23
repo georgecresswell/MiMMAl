@@ -4,9 +4,10 @@
 \alias{runMiMMAl}
 \title{The main MiMMAl function.}
 \usage{
-runMiMMAl(samplename, inputfile, min.snps = 10, sd.width = 1/3, seed = 1,
-  baf.res = 2, use.ks.gate = TRUE, plot.sd.den = TRUE,
-  plot.lit.plot = TRUE, plot.star.plot = TRUE, plot.transformed = TRUE)
+runMiMMAl(samplename, inputfile, min.snps = 10, sd.width = 1/3,
+  preset.sd = NULL, seed = 1, baf.res = 2, use.ks.gate = TRUE,
+  plot.sd.den = TRUE, plot.lit.plot = TRUE, plot.star.plot = TRUE,
+  plot.transformed = TRUE)
 }
 \arguments{
 \item{samplename}{The output name for your sample.}
@@ -16,6 +17,8 @@ runMiMMAl(samplename, inputfile, min.snps = 10, sd.width = 1/3, seed = 1,
 \item{min.snps}{Minimum number of SNPs to model. Default = 10.}
 
 \item{sd.width}{This value is multiplied by the chosen sd and the tested sd range is determined as the sd±sd.width. Default = 1/3.}
+
+\item{preset.sd}{Add a float value for the standard deviation if it is to be preset, without this it 'learns' the sd. Default = NULL.}
 
 \item{seed}{Seed set for reproducibility. Default = 1.}
 

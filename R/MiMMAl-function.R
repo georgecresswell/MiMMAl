@@ -19,7 +19,6 @@
 #' @import ComplexHeatmap
 #' @import circlize
 #' @import grid
-#' @importFrom cowplot ggsave
 #' @export
 #' @examples
 #' runMiMMAl()
@@ -122,7 +121,7 @@ runMiMMAl = function(samplename,
         geom_line() +
         geom_vline(xintercept=array.sd, color="gray", linetype = "longdash") +
         geom_vline(xintercept=c(array.sd*(1-sd.width), array.sd*(1+sd.width)), color="red", linetype = "longdash") +
-        ggtitle(paste0("Density of standard deviation ",samplename))
+        ggtitle(paste0("Density of standard deviation ",samplename)) + theme_cowplot()
       print(p)
       dev.off()
     }
