@@ -19,11 +19,25 @@ Once those packages have been installed. MiMMAl can be downloaded and installed 
 
 ## Running
 
-To run MiMMAl a tab-separated text file needs to be produces containing four columns containing; chromosome (_chr_), position (_pos_), raw BAF value (_BAF_) and the mean/median value of the segment of which the loci belongs (_BAFseg_), for heterozygous SNPs only.
+To run MiMMAl a tab-separated text file needs to be produces containing four columns containing; chromosome (_chr_), position (_pos_), raw BAF value (_BAF_) and the mean/median mirrored BAF of the segment of which the loci belongs (_BAFseg_), for heterozygous SNPs only.
 
 The minimum requirements for running MiMMAl (`runMiMMAl`) are to include the `samplename`, this will be appended to `.BAFphased.txt`, the output of MiMMAl, that will be produced in the current working directory. You will also have to provide the path and name of the input text file as `inputfile`.
 
 By default MiMMAl will produce plots representing the fits produced, including the results of the initial search of fits using expectation maximisation to search for a range for _sd_, as well as the global and local searches of parameter space including means and _sd_ in the current working directory. This can be disabled in the options for MiMMAl.
+
+## Testing
+
+One can make some next generation sequencing style input data using the following lines of code in R.
+
+`n        = 100000`
+
+`coverage = rpois(n, lambda = 120)`
+
+`majcov   = rbinom(n, size = coverage, prob = 0.6)`
+
+`majoraf  = majcov / coverage`
+
+`baf      = ifelse(runif(n) > 0.5, 1 - majoraf, majoraf)`
 
 ## Additional parameters
 
