@@ -1,6 +1,6 @@
 Package: MiMMAl
 Title: Using two-component Gaussian mixture modelling to estimate the major allele distribution in genotying data.
-Version: 0.0.0.9000
+Version: 0.0.1
 Authors@R: person("George", "Cresswell", email = "george.cresswell@icr.ac.uk", role = c("aut", "cre"))
 Description: _Add description_
 Depends: R (>= 3.3.2)
